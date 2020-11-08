@@ -24,6 +24,7 @@ struct NFA
     Function function_{};
 
     NFA (size_t n, vector<State> init, vector<State> f_st, vector<vector<State>> fun);
+    NFA (size_t n, Set init, vector<State> f_st, vector<vector<State>> fun);
 
     [[nodiscard]]
     Set compute (const Set& states, Chr a) const;

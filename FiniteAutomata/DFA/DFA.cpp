@@ -9,7 +9,7 @@ NFA DFA::reverse_nfa () const
             rev_function.emplace_back(vector{ function_[p][a], a, p });
 
     return NFA(
-        size_, f_states.elements, vector{ b_state }, rev_function);
+        size_, f_states, vector{ b_state }, rev_function);
 }
 
 void DFA::print ()

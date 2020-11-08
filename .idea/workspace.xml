@@ -34,15 +34,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6e6cdfb7-b736-43ef-8249-c6b78cded5f1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/FiniteAutomata/include.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Misc/debug.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DFA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DFA.h" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NFA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/NFA/NFA.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NFA.h" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/NFA/NFA.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Set.h" beforeDir="false" afterPath="$PROJECT_DIR$/Misc/Set.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FiniteAutomata/NFA/NFA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/NFA/NFA.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FiniteAutomata/NFA/NFA.h" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/NFA/NFA.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Misc/Set.h" beforeDir="false" afterPath="$PROJECT_DIR$/Misc/Set.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
