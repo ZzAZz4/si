@@ -1,42 +1,6 @@
 #include "DFA.h"
 #include "../NFA/NFA.h"
 
-vector<vector<int>> DFA::equivalence_table () const
-{
-    typedef function<int (State, State)> DFS_Function;
-
-    Table table(size_, vector<int>(size_, -1));
-    DFS_Function areEquivalent = [&] (State i, State j)
-    {
-        auto& curr = table[i][j];
-        if (curr != -1)
-            return curr;
-        curr = 1;
-        for (const Chr& a : { 0u, 1u })
-        {
-            State n_i = compute(i, a);
-            State n_j = compute(j, a);
-            if (!areEquivalent(n_i, n_j))
-                return curr = 0;
-        }
-        return curr;
-    };
-
-    for (State i = 0; i < size_; ++i)
-    {
-        table[i][i] = 1;
-        for (size_t j = 0; j < i; ++j)
-            if ((accepts(i) && !accepts(j)) || (!accepts(i) && accepts(j)))
-                table[i][j] = 0;
-    }
-
-    for (State i = 0; i < size_; ++i)
-        for (State j = 0; j < i; ++j)
-            table[j][i] = areEquivalent(i, j);
-
-    return table;
-}
-
 NFA DFA::reverse_nfa () const
 {
     vector<vector<State>> rev_function;
@@ -78,4 +42,59 @@ DFA::DFA (
 DFA DFA::brzozowski_reduce () const
 {
     return this->reverse_nfa().to_dfa().reverse_nfa().to_dfa();
+}
+
+vector<vector<int>> DFA::equivalence_table () const
+{
+    Table table(size_, vector<int>(size_, 1));
+
+    for (State i = 0; i < size_; ++i)
+        for (State j = 0; j < i; ++j)
+            if ((accepts(i) && !accepts(j)) || (!accepts(i) && accepts(j)))
+                table[i][j] = table[j][i] = 0;
+
+    while (true)
+    {
+        Table temp = table;
+        for (State i = 0; i < size_; ++i)
+            for (State j = 0; j < i; ++j)
+                for (const Chr& a : { 0u, 1u })
+                    if (table[compute(i, a)][compute(j, a)] == 0)
+                        table[i][j] = table[j][i] = 0;
+        if (temp == table)
+            break;
+    }
+    return table;
+//    typedef function<int (State, State)> DFS_Function;
+//
+//    Table table(size_, vector<int>(size_, -1));
+//    DFS_Function areEquivalent = [&] (State i, State j)
+//    {
+//        auto& curr = table[i][j];
+//        if (curr != -1)
+//            return curr;
+//        curr = 1;
+//        for (const Chr& a : { 0u, 1u })
+//        {
+//            State n_i = compute(i, a);
+//            State n_j = compute(j, a);
+//            if (!areEquivalent(n_i, n_j))
+//                return curr = 0;
+//        }
+//        return curr;
+//    };
+//
+//    for (State i = 0; i < size_; ++i)
+//    {
+//        table[i][i] = 1;
+//        for (size_t j = 0; j < i; ++j)
+//            if ((accepts(i) && !accepts(j)) || (!accepts(i) && accepts(j)))
+//                table[i][j] = 0;
+//    }
+//
+//    for (State i = 0; i < size_; ++i)
+//        for (State j = 0; j < i; ++j)
+//            table[j][i] = areEquivalent(i, j);
+//
+//    return table;
 }
