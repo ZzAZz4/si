@@ -1,0 +1,3 @@
+"C:\Program Files\JetBrains\CLion 2019.2.1\bin\cmake\win\bin\cmake.exe" -E remove -f CMakeFiles\si.dir/objects.a
+C:\MinGW\bin\ar.exe cr CMakeFiles\si.dir/objects.a @CMakeFiles\si.dir\objects1.rsp
+C:\MinGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\si.dir/objects.a -Wl,--no-whole-archive  -o si.exe -Wl,--out-implib,libsi.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\si.dir\linklibs.rsp

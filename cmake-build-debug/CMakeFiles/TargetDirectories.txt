@@ -1,0 +1,3 @@
+C:/Users/esteb/Desktop/Teoria/si/cmake-build-debug/CMakeFiles/si.dir
+C:/Users/esteb/Desktop/Teoria/si/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/esteb/Desktop/Teoria/si/cmake-build-debug/CMakeFiles/rebuild_cache.dir
