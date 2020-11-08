@@ -3,42 +3,40 @@
 
 vector<vector<int>> DFA::equivalence_table () const
 {
-    enum EQ_CLASS
-    {
-        DIST = 0,
-        EQ = 1,
-        UNDEF = -1
-    };
-    vector<vector<int>> table(
-        size_, vector<int>(size_, UNDEF));
+    typedef function<int (State, State)> DFS_Function;
 
-    function<int (State, State)> fill_table = [&] (State i, State j)
+    Table table(size_, vector<int>(size_, -1));
+    DFS_Function areEquivalent = [&] (State i, State j)
     {
-        if (table[i][j] != UNDEF)
-            return table[i][j];
-        table[i][j] = table[j][i] = EQ;
-        for (const auto& a : { 0u, 1u })
+        auto& curr = table[i][j];
+        if (curr != -1)
+            return curr;
+        curr = 1;
+        for (const Chr& a : { 0u, 1u })
         {
-            auto n_i = compute(i, a), n_j = compute(j, a);
-            if (fill_table(n_i, n_j) == DIST)
-                return table[i][j] = table[j][i] = DIST;
+            State n_i = compute(i, a);
+            State n_j = compute(j, a);
+            if (!areEquivalent(n_i, n_j))
+                return curr = 0;
         }
-        return table[i][j] = table[j][i] = EQ;
+        return curr;
     };
 
-    for (int i = 0; i < size_; ++i)
+    for (State i = 0; i < size_; ++i)
     {
-        table[i][i] = EQ;
-        for (int j = 0; j < i; ++j)
-            if (f_states.contains(i) ^ f_states.contains(j))
-                table[i][j] = table[j][i] = DIST;
+        table[i][i] = 1;
+        for (size_t j = 0; j < i; ++j)
+            if ((accepts(i) && !accepts(j)) || (!accepts(i) && accepts(j)))
+                table[i][j] = 0;
     }
-    for (int i = 0; i < size_; ++i)
-        for (int j = 0; j < i; ++j)
-            fill_table(i, j);
+
+    for (State i = 0; i < size_; ++i)
+        for (State j = 0; j < i; ++j)
+            table[j][i] = areEquivalent(i, j);
 
     return table;
 }
+
 NFA DFA::make_reverse () const
 {
     vector<vector<State>> rev_function;
@@ -46,7 +44,7 @@ NFA DFA::make_reverse () const
         for (const Chr& a : { 0u, 1u })
             rev_function.emplace_back(vector{ function_[p][a], a, p });
 
-    return NFA (
+    return NFA(
         size_, f_states.elements, vector{ b_state }, rev_function);
 }
 

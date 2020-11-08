@@ -16,6 +16,7 @@ struct DFA
     typedef unsigned State;
     typedef unsigned Chr;
     typedef vector<vector<State>> Function;
+    typedef vector<vector<int>> Table;
 
     size_t size_{};
     State b_state{};
@@ -34,7 +35,8 @@ struct DFA
     [[nodiscard]]
     NFA make_reverse () const;
 
-    vector<vector<int>> equivalence_table () const;
+    [[nodiscard]]
+    Table equivalence_table () const;
 
     void print ();
 };

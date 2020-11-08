@@ -26,10 +26,10 @@ int main ()
     endl(cout);
 
     auto table = dfa.equivalence_table();
-    for (auto i : table)
+    for (const auto& row : table)
     {
-        for (auto j : i)
-            std::cout << j << ' ';
+        for (const auto& elem : row)
+            std::cout << elem << ' ';
         endl(std::cout);
     }
     return 0;
