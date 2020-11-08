@@ -1,9 +1,9 @@
 #include <queue>
-#include "DFA.h"
+#include "../DFA/DFA.h"
 #include "NFA.h"
 
 
-DFA NFA::make_dfa () const
+DFA NFA::to_dfa () const
 {
     unordered_map<Set, State> state;
     queue<Set> wait_queue;
@@ -53,7 +53,7 @@ Set NFA::compute (const Set& states, NFA::Chr a) const
 
 bool NFA::accepts (const Set& states) const
 {
-    for (auto state : states)
+    for (const auto& state : states)
         if (f_states.contains(state))
             return true;
     return false;

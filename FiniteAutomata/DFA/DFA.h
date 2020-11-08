@@ -7,7 +7,7 @@
 
 #include <utility>
 #include <iostream>
-#include "Set.h"
+#include "../../Misc/Set.h"
 
 struct NFA;
 
@@ -23,20 +23,22 @@ struct DFA
     Set f_states{};
     Function function_{};
 
-    DFA (size_t n, State begin, vector<State> f_states, const Function& fun);
+    DFA (size_t n, State begin, vector<State> f_states, Function fun);
 
     [[nodiscard]]
     State compute (State state, Chr input) const
     { return function_[state][input]; }
 
     [[nodiscard]]
-    bool accepts (int state) const;
+    bool accepts (State state) const;
 
     [[nodiscard]]
-    NFA make_reverse () const;
+    NFA reverse_nfa () const;
 
     [[nodiscard]]
     Table equivalence_table () const;
+
+    DFA brzozowski_reduce () const;
 
     void print ();
 };

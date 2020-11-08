@@ -1,36 +1,32 @@
-#include "DFA.h"
-#include "NFA.h"
-
-auto brzozowski_reduce(const DFA& dfa)
-{
-    return dfa.make_reverse().make_dfa().make_reverse().make_dfa();
-}
+#include "FiniteAutomata/include.h"
 
 int main ()
 {
-    DFA dfa(
-        3, 0,
-        { 0, 1 },
-        {{ 0, 0, 1 },
-         { 0, 1, 2 },
-         { 1, 0, 1 },
-         { 1, 1, 2 },
-         { 2, 0, 0 },
-         { 2, 1, 2 }}
-    );
-    dfa.print();
-    endl(cout);
+    typedef unsigned State;
 
-    auto simp = brzozowski_reduce(dfa);
-    simp.print();
+    size_t n, init, f_size;
+    cin >> n >> init >> f_size;
+
+    vector<size_t> f_states(f_size);
+    for (auto& state : f_states)
+        cin >> state;
+
+    vector<vector<unsigned>> transitions(2 * n, vector<unsigned>(3, 0));
+    for (auto& transition : transitions)
+        cin >> transition[0] >> transition[1] >> transition[2];
+
+    DFA dfa(n, init, f_states, move(transitions));
+
+    auto simp_dfa = dfa.brzozowski_reduce();
+    simp_dfa.print();
     endl(cout);
 
     auto table = dfa.equivalence_table();
     for (const auto& row : table)
     {
         for (const auto& elem : row)
-            std::cout << elem << ' ';
-        endl(std::cout);
+            cout << elem << ' ';
+        endl(cout);
     }
     return 0;
 }

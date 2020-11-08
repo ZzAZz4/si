@@ -8,7 +8,7 @@
 #include <utility>
 #include <unordered_set>
 
-#include "Set.h"
+#include "../../Misc/Set.h"
 
 struct DFA;
 
@@ -32,7 +32,7 @@ struct NFA
     bool accepts (const Set& states) const;
 
     [[nodiscard]]
-    DFA make_dfa () const;
+    DFA to_dfa () const;
 
     void print ();
 

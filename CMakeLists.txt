@@ -4,4 +4,4 @@ project(si)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(si
-        main.cpp Set.h NFA.h DFA.h DFA.cpp NFA.cpp)
+        main.cpp Misc/Set.h FiniteAutomata/NFA/NFA.h FiniteAutomata/DFA/DFA.h FiniteAutomata/DFA/DFA.cpp FiniteAutomata/NFA/NFA.cpp Misc/debug.h FiniteAutomata/include.h)

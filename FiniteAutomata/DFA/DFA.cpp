@@ -1,5 +1,5 @@
 #include "DFA.h"
-#include "NFA.h"
+#include "../NFA/NFA.h"
 
 vector<vector<int>> DFA::equivalence_table () const
 {
@@ -37,7 +37,7 @@ vector<vector<int>> DFA::equivalence_table () const
     return table;
 }
 
-NFA DFA::make_reverse () const
+NFA DFA::reverse_nfa () const
 {
     vector<vector<State>> rev_function;
     for (State p = 0; p < function_.size(); ++p)
@@ -60,12 +60,12 @@ void DFA::print ()
             cout << i << ' ' << a << ' ' << function_[i][a] << '\n';
 }
 
-bool DFA::accepts (int state) const
+bool DFA::accepts (State state) const
 { return f_states.contains(state); }
 
 DFA::DFA (
     size_t n, DFA::State begin, vector<State> f_states,
-    const DFA::Function& fun)
+    Function fun)
     : size_(n),
       b_state(begin),
       f_states(move(f_states))
@@ -73,4 +73,9 @@ DFA::DFA (
     function_.resize(size_, vector<State>(2, 0));
     for (const auto& trans : fun)
         function_[trans[0]][trans[1]] = trans[2];
+}
+
+DFA DFA::brzozowski_reduce () const
+{
+    return this->reverse_nfa().to_dfa().reverse_nfa().to_dfa();
 }
