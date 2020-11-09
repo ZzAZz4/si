@@ -7,47 +7,85 @@
 #include <vector>
 #include <functional>
 #include <cmath>
-#include <unordered_set>
 
 using namespace std;
 
 struct Set
 {
-    unordered_set<unsigned> contained;
+    vector<bool> contained;
+    vector<unsigned> elements;
 
     explicit Set (vector<unsigned> v = {})
-        : contained(v.begin(), v.end())
-    {}
+    {
+        if (!v.empty())
+        {
+            if (!is_sorted(std::begin(v), std::end(v)))
+                sort(std::begin(v), std::end(v));
+            elements = move(v);
+            unsigned max = elements.back();
+            unsigned size = 1;
+            while (size < max + 1)
+                size *= 2;
+            contained.resize(size, false);
+            for (const auto& elem : elements)
+                contained[elem] = true;
+        }
+    }
 
     [[nodiscard]]
     auto begin () const
-    { return contained.begin(); }
+    { return elements.begin(); }
 
     [[nodiscard]]
     auto end () const
-    { return contained.end(); }
+    { return elements.end(); }
 
     [[nodiscard]]
     int size () const
+    { return elements.size(); }
+
+    [[nodiscard]]
+    int capacity () const
     { return contained.size(); }
 
+    void reserve (int n)
+    {
+        contained.resize(n);
+        elements.reserve(n);
+    }
+
     void insert (int element)
-    { contained.emplace(element); }
+    {
+        if (element >= contained.size())
+        {
+            unsigned size = 1;
+            while (size < element + 1)
+                size *= 2;
+            contained.resize(size, false);
+        }
+        if (!contained[element])
+        {
+            if (elements.empty() || elements.back() < element)
+                elements.emplace_back(element);
+            else
+                elements.insert(
+                    upper_bound(elements.begin(), elements.end(), element),
+                    element);
+            contained[element] = true;
+        }
+    }
 
     bool operator == (const Set& other) const
     {
-        for (auto i : this->contained)
-            if (!other.contains(i))
-                return false;
-        for (auto i : other.contained)
-            if (!this->contains(i))
-                return false;
-        return true;
+        return this->elements == other.elements;
     }
 
     [[nodiscard]]
     bool contains (unsigned element) const
-    { return contained.count(element); }
+    {
+        return element < contained.size() && contained[element];
+    }
+
 };
 
 template<>

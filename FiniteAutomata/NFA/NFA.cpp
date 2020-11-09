@@ -25,13 +25,13 @@ DFA NFA::to_dfa () const
         for (const Chr a : { 0u, 1u })
         {
             const auto comp = compute(current, a);
-            const auto[it, inserted] = state.emplace(comp, i + 1);
+            const auto [it, inserted] = state.emplace(comp, i + 1);
             if (inserted)
             {
                 wait_queue.emplace(comp);
                 ++i;
             }
-            const auto&[_, dest_state] = *it;
+            const auto& [_, dest_state] = *it;
             function.emplace_back(vector{ cur_state, a, dest_state });
         }
     }
@@ -40,7 +40,7 @@ DFA NFA::to_dfa () const
 
 Set NFA::compute (const Set& states, NFA::Chr a) const
 {
-    if (states.size() == 0)
+    if (states.elements.empty())
         return states;
 
     unordered_set<State> res;
@@ -48,7 +48,7 @@ Set NFA::compute (const Set& states, NFA::Chr a) const
         for (const auto& i : function_[p][a])
             res.emplace(i);
 
-    return Set(vector<State>{ res.begin(), res.end() });
+    return Set(vector<State>{ res.begin(), res.end()});
 }
 
 bool NFA::accepts (const Set& states) const
@@ -85,20 +85,9 @@ NFA::NFA (
     size_t n, vector<State> init, vector<State> f_st, vector<vector<State>> fun)
     : size_(n), b_states(move(init)), f_states(move(f_st))
 {
-//    sort(
-//        fun.begin(), fun.end(), [] (const auto& a, const auto& b)
-//        { return a[2] < b[2]; });
-    function_.resize(size_, vector<Set>(2));
-    for (const auto& trans : fun)
-        function_[trans[0]][trans[1]].insert(trans[2]);
-}
-
-NFA::NFA (size_t n, Set init, vector<State> f_st, vector<vector<State>> fun)
-    : size_(n), b_states(move(init)), f_states(move(f_st))
-{
-//    sort(
-//        fun.begin(), fun.end(), [] (const auto& a, const auto& b)
-//        { return a[2] < b[2]; });
+    sort(
+        fun.begin(), fun.end(), [] (const auto& a, const auto& b)
+        { return a[2] < b[2]; });
     function_.resize(size_, vector<Set>(2));
     for (const auto& trans : fun)
         function_[trans[0]][trans[1]].insert(trans[2]);
