@@ -46,22 +46,27 @@ DFA DFA::brzozowski_reduce () const
 
 vector<vector<int>> DFA::equivalence_table () const
 {
-    Table table(size_, vector<int>(size_, 1));
+    Table table(size_, vector<int>(size_, 0));
 
     for (State i = 0; i < size_; ++i)
         for (State j = 0; j < i; ++j)
-            if ((accepts(i) && !accepts(j)) || (!accepts(i) && accepts(j)))
-                table[i][j] = table[j][i] = 0;
+            if (accepts(i) ^ accepts(j))
+                table[i][j] = table[j][i] = 1;
 
     while (true)
     {
-        Table temp = table;
+        bool modified = false;
         for (State i = 0; i < size_; ++i)
             for (State j = 0; j < i; ++j)
-                for (const Chr& a : { 0u, 1u })
-                    if (table[compute(i, a)][compute(j, a)] == 0)
-                        table[i][j] = table[j][i] = 0;
-        if (temp == table)
+                if (!table[i][j])
+                    for (const Chr& a : { 0u, 1u })
+                        if (table[compute(i, a)][compute(j, a)])
+                        {
+                            table[i][j] = table[j][i] = 1;
+                            modified = true;
+                        }
+
+        if (!modified)
             break;
     }
     return table;
