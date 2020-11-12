@@ -37,7 +37,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.h" beforeDir="false" afterPath="$PROJECT_DIR$/FiniteAutomata/DFA/DFA.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Misc/Set.h" beforeDir="false" afterPath="$PROJECT_DIR$/Misc/Set.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -104,7 +104,8 @@
       <updated>1604799309563</updated>
       <workItem from="1604799311501" duration="26604000" />
       <workItem from="1604963964271" duration="6752000" />
-      <workItem from="1605152588435" duration="2565000" />
+      <workItem from="1605152588435" duration="3344000" />
+      <workItem from="1605156140077" duration="4674000" />
     </task>
     <servers />
   </component>

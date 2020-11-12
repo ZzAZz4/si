@@ -6,6 +6,7 @@
 #include <deque>
 #include <vector>
 #include <functional>
+#include <algorithm>
 #include <cmath>
 
 using namespace std;

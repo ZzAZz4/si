@@ -1,15 +1,14 @@
 #include "DFA.h"
 #include "../NFA/NFA.h"
 
-NFA DFA::reverse_nfa () const
+NFA DFA::revert_as_nfa () const
 {
     vector<vector<State>> rev_function;
     for (State input = 0; input < function_.size(); ++input)
         for (const Chr& chr : { 0u, 1u })
             rev_function.emplace_back(vector{ function_[input][chr], chr, input });
 
-    return NFA(
-        size_, f_states.elements, vector{ b_state }, rev_function);
+    return NFA(size_, f_states.elements, vector{ b_state }, rev_function);
 }
 
 void DFA::print ()
@@ -41,7 +40,7 @@ DFA::DFA (
 
 DFA DFA::brzozowski_reduce () const
 {
-    return this->reverse_nfa().to_dfa().reverse_nfa().to_dfa();
+    return this->revert_as_nfa().to_dfa().revert_as_nfa().to_dfa();
 }
 
 vector<vector<int>> DFA::equivalence_table () const

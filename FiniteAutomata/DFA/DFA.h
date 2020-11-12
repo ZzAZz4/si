@@ -16,6 +16,7 @@ struct DFA
     typedef unsigned State;
     typedef unsigned Chr;
     typedef vector<vector<State>> Function;
+    // pregunta 2
     typedef vector<vector<int>> Table;
 
     size_t size_{};
@@ -33,7 +34,7 @@ struct DFA
     bool accepts (State state) const;
 
     [[nodiscard]]
-    NFA reverse_nfa () const;
+    NFA revert_as_nfa () const;
 
     [[nodiscard]]
     Table equivalence_table () const;
