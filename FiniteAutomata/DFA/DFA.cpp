@@ -4,9 +4,9 @@
 NFA DFA::reverse_nfa () const
 {
     vector<vector<State>> rev_function;
-    for (State p = 0; p < function_.size(); ++p)
-        for (const Chr& a : { 0u, 1u })
-            rev_function.emplace_back(vector{ function_[p][a], a, p });
+    for (State input = 0; input < function_.size(); ++input)
+        for (const Chr& chr : { 0u, 1u })
+            rev_function.emplace_back(vector{ function_[input][chr], chr, input });
 
     return NFA(
         size_, f_states.elements, vector{ b_state }, rev_function);

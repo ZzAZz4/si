@@ -1,5 +1,6 @@
 #include "FiniteAutomata/include.h"
 
+
 int main ()
 {
     typedef unsigned State;
@@ -17,9 +18,13 @@ int main ()
 
     DFA dfa(n, init, f_states, move(transitions));
 
+    // pregunta 1
+
     auto simp_dfa = dfa.brzozowski_reduce();
     simp_dfa.print();
     endl(cout);
+
+    // pregunta 2
 
     auto table = dfa.equivalence_table();
     for (const auto& row : table)
@@ -28,5 +33,6 @@ int main ()
             cout << elem << ' ';
         endl(cout);
     }
+
     return 0;
 }

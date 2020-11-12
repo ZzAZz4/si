@@ -38,6 +38,7 @@ struct DFA
     [[nodiscard]]
     Table equivalence_table () const;
 
+    [[nodiscard]]
     DFA brzozowski_reduce () const;
 
     void print ();
