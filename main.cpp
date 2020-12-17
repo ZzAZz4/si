@@ -47,6 +47,10 @@ int main ()
 
     auto simp = dfa.huffman_moore_reduce();
     simp.print();
+    endl(std::cout);
+
+    auto simp2 = dfa.hopcroft_reduce();
+    simp2.print();
 
     return 0;
 }

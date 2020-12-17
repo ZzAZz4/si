@@ -87,6 +87,29 @@ struct Set
         return element < contained.size() && contained[element];
     }
 
+    [[nodiscard]]
+    Set intersection (const Set& other) const
+    {
+        vector<unsigned> temp;
+        std::set_intersection(
+            this->begin(), this->end(),
+            other.begin(), other.end(),
+            std::back_inserter(temp)
+        );
+        return Set(move(temp));
+    }
+
+    [[nodiscard]]
+    Set difference (const Set& other) const
+    {
+        vector<unsigned> temp;
+        std::set_difference(
+            this->begin(), this->end(),
+            other.begin(), other.end(),
+            std::back_inserter(temp)
+        );
+        return Set(move(temp));
+    }
 };
 
 template<>

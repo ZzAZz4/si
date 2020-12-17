@@ -29,6 +29,9 @@ struct NFA
     Set compute (const Set& states, Chr a) const;
 
     [[nodiscard]]
+    Set compute (const State& state, Chr a) const;
+
+    [[nodiscard]]
     bool accepts (const Set& states) const;
 
     [[nodiscard]]

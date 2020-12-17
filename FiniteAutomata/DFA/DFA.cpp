@@ -2,6 +2,7 @@
 #include "../NFA/NFA.h"
 #include <unordered_map>
 #include <queue>
+#include <set>
 
 NFA DFA::revert_as_nfa () const
 {
@@ -208,6 +209,87 @@ DFA DFA::remove_unreachable () const
     fill(b_state);
     DFA n_dfa(i, (State) 0, f_reachable, func_reachable);
     return n_dfa;
+}
+
+DFA DFA::hopcroft_reduce () const
+{
+    auto filtered = remove_unreachable();
+    auto rev = filtered.revert_as_nfa();
+
+    Set F = filtered.f_states;
+    Set Q_nF;
+    for (State i = 0; i < filtered.size_; ++i)
+        if (!F.contains(i))
+            Q_nF.insert(i);
+
+    unordered_set<Set> P, W;
+    P.emplace(F);
+    W.emplace(F);
+    P.emplace(Q_nF);
+    W.emplace(Q_nF);
+
+    while (!W.empty())
+    {
+        auto A = *W.begin();
+        W.erase(A);
+        Set ASet(vector<State>(A.begin(), A.end()));
+
+        for (Chr c : { 0u, 1u })
+        {
+            auto X = rev.compute(ASet, c);
+            for (auto tempIt = P.begin(); tempIt != P.end(); ++tempIt)
+            {
+                Set Y(vector<State>(tempIt->begin(), tempIt->end()));
+                auto intersection = Y.intersection(X);
+                auto diff = Y.difference(X);
+                if (intersection.size() > 0 && diff.size() > 0)
+                {
+                    P.erase(tempIt);
+                    P.emplace(intersection);
+                    P.emplace(diff);
+                    auto wIt = W.find(Y);
+                    if (wIt != W.end())
+                    {
+                        W.erase(wIt);
+                        W.emplace(intersection);
+                        W.emplace(diff);
+                    }
+                    else if (intersection.size() <= diff.size())
+                        W.emplace(intersection);
+                    else W.emplace(diff);
+                }
+            }
+        }
+    }
+    // P has all partitions, be happy
+    vector<vector<State>> blocks;
+    unordered_map<State, State> block_index;
+
+    for (auto partition : P)
+    {
+        for (State state : partition)
+            block_index[state] = blocks.size();
+        blocks.emplace_back(move(partition.elements));
+    }
+
+    size_t new_size = blocks.size();
+    State init = block_index[filtered.b_state];
+    vector<State> new_accept_states;
+    Function new_transitions;
+
+    for (auto block : blocks)
+    {
+        auto repr = block.front();
+        State index = block_index[repr];
+        if (filtered.accepts(repr))
+            new_accept_states.emplace_back(index);
+        for (Chr c : { 0u, 1u })
+        {
+            State dest = block_index[filtered.function_[repr][c]];
+            new_transitions.push_back(vector<State>{ index, c, dest });
+        }
+    }
+    return DFA(new_size, init, new_accept_states, new_transitions);
 }
 
 

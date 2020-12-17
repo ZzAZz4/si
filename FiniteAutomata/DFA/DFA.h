@@ -51,6 +51,9 @@ struct DFA
     [[nodiscard]]
     DFA huffman_moore_reduce () const;
 
+    [[nodiscard]]
+    DFA hopcroft_reduce () const;
+
     void print ();
 };
 

@@ -93,3 +93,10 @@ NFA::NFA (
         function_[trans[0]][trans[1]].insert(trans[2]);
 }
 
+Set NFA::compute (const NFA::State& state, NFA::Chr a) const
+{
+    Set set;
+    set.insert(a);
+    return compute(set, a);
+}
+
