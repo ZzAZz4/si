@@ -5,10 +5,10 @@ int main ()
 {
     typedef unsigned State;
 
-    size_t n, init, f_size;
+    unsigned n, init, f_size;
     cin >> n >> init >> f_size;
 
-    vector<size_t> f_states(f_size);
+    vector<unsigned> f_states(f_size);
     for (auto& state : f_states)
         cin >> state;
 
@@ -18,21 +18,35 @@ int main ()
 
     DFA dfa(n, init, f_states, move(transitions));
 
-    // pregunta 1
+//    // Pregunta 1
+//
+//    auto simp_dfa = dfa.brzozowski_reduce();
+//    simp_dfa.print();
+//    endl(cout);
+//
+//    // Pregunta 2
+//    auto table = dfa.equivalence_table();
+//    auto table2 = dfa.optimized_equivalence_table();
+//    EXPECTSVAL(table.size(), table2.size());
+//
+//    for (int i = 0; i < table.size(); ++i)
+//    {
+//        EXPECTSVAL(table[i].size(), table2[i].size());
+//        for (int j = 0; j < table[i].size(); ++j)
+//        {
+//            cout << table[i][j] << ' ';
+//            EXPECTSVAL(table[i][j], table2[i][j]);
+//        }
+//        endl(cout);
+//    }
+    auto table = dfa.optimized_equivalence_table();
+    for (int i = 0; i < table.size(); ++i, endl(std::cout))
+        for (int j : table[i])
+            std::cout << j << ' ';
+    endl(std::cout);
 
-    auto simp_dfa = dfa.brzozowski_reduce();
-    simp_dfa.print();
-    endl(cout);
-
-    // pregunta 2
-
-    auto table = dfa.equivalence_table();
-    for (const auto& row : table)
-    {
-        for (const auto& elem : row)
-            cout << elem << ' ';
-        endl(cout);
-    }
+    auto simp = dfa.huffman_moore_reduce();
+    simp.print();
 
     return 0;
 }

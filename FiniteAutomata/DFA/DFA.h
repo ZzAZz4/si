@@ -42,6 +42,15 @@ struct DFA
     [[nodiscard]]
     DFA brzozowski_reduce () const;
 
+    [[nodiscard]]
+    Table optimized_equivalence_table () const;
+
+    [[nodiscard]]
+    DFA remove_unreachable () const;
+
+    [[nodiscard]]
+    DFA huffman_moore_reduce () const;
+
     void print ();
 };
 
