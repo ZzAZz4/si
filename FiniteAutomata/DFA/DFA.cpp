@@ -92,7 +92,7 @@ DFA::Table DFA::optimized_equivalence_table () const
 
     unordered_map<SPair, vector<SPair>> dependencies;
     vector<vector<int>> table(size_, vector<int>(size_, 0));
-    queue<SPair> remaining;
+    queue<SPair> pending;
 
     for (State p = 0; p < size_; ++p)
         for (State q = 0; q < size_; ++q)
@@ -107,20 +107,22 @@ DFA::Table DFA::optimized_equivalence_table () const
             if (accepts(i) ^ accepts(j))
             {
                 table[i][j] = table[j][i] = 1;
-                remaining.emplace(i, j);
-                remaining.emplace(j, i);
+                pending.emplace(i, j);
+                pending.emplace(j, i);
             }
 
-    while (!remaining.empty())
+    while (!pending.empty())
     {
-        SPair entry = remaining.front();
+        SPair entry = pending.front();
         for (auto[p, q] : dependencies[entry])
         {
             if (!table[p][q])
-                remaining.emplace(p, q);
-            table[p][q] = 1;
+            {
+                pending.emplace(p, q);
+                table[p][q] = 1;
+            }
         }
-        remaining.pop();
+        pending.pop();
     }
     return table;
 
@@ -129,7 +131,7 @@ DFA::Table DFA::optimized_equivalence_table () const
 DFA DFA::huffman_moore_reduce () const
 {
     DFA filtered = remove_unreachable();
-    Table table = filtered.optimized_equivalence_table();
+    Table table = filtered.equivalence_table();
 
     vector<vector<State>> blocks;
     unordered_map<State, State> block_index;
@@ -232,21 +234,23 @@ DFA DFA::hopcroft_reduce () const
     {
         auto A = *W.begin();
         W.erase(A);
-        Set ASet(vector<State>(A.begin(), A.end()));
 
         for (Chr c : { 0u, 1u })
         {
-            auto X = rev.compute(ASet, c);
-            for (auto tempIt = P.begin(); tempIt != P.end(); ++tempIt)
+            auto X = rev.compute(A, c);
+            vector<Set> PAdd;
+            vector<unordered_set<Set>::iterator> PRemove;
+            for (auto PIt = P.begin(); PIt != P.end(); ++PIt)
             {
-                Set Y(vector<State>(tempIt->begin(), tempIt->end()));
-                auto intersection = Y.intersection(X);
-                auto diff = Y.difference(X);
+                Set Y(vector<State>(PIt->begin(), PIt->end()));
+                Set intersection = Y.intersection(X);
+                Set diff = Y.difference(X);
                 if (intersection.size() > 0 && diff.size() > 0)
                 {
-                    P.erase(tempIt);
-                    P.emplace(intersection);
-                    P.emplace(diff);
+                    PRemove.emplace_back(PIt);
+                    PAdd.emplace_back(intersection);
+                    PAdd.emplace_back(diff);
+
                     auto wIt = W.find(Y);
                     if (wIt != W.end())
                     {
@@ -259,6 +263,11 @@ DFA DFA::hopcroft_reduce () const
                     else W.emplace(diff);
                 }
             }
+            for (auto it : PRemove)
+                P.erase(it);
+            for (auto s : PAdd)
+                P.emplace(move(s));
+
         }
     }
     // P has all partitions, be happy
